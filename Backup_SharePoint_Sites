@@ -1,0 +1,58 @@
+Different ways to backup SharePoint site collections
+
+Examples:
+
+if(!(Get-PSSnapin Microsoft.SharePoint.PowerShell -ea 0))
+{
+Add-PSSnapin Microsoft.SharePoint.PowerShell
+}
+
+cls 
+
+$site = "http://spapp1/etd"                                   
+$path = "C:\Backups\SPApp1_ETD_06-19-2020.bak"                                         
+ 
+Backup-SPSite -Identity $site -Path $path -Verbose
+
+
+Backup 1 Site 
+ 
+$site = "http://somesite/form/centralfinance"                                   
+$path = "E:\Backups\somesite\2017.09.18\somesite_2017-09-18.bak"                                         
+ 
+Backup-SPSite -Identity $site -Path $path –UseSQLSnapshot -Verbose -NoSiteLock
+
+
+Backup 2 Sites
+
+#KR: Backup site collections
+ 
+If ((Get-PSSnapIn -Name Microsoft.SharePoint.PowerShell -ErrorAction SilentlyContinue) -eq $null ) 
+{ Add-PSSnapIn -Name Microsoft.SharePoint.PowerShell }
+ 
+Start-SPAssignment -Global
+
+cls 
+
+$site1 = "http://drive.bmwgroup.net/process/deviations2"                                     
+$site2 = "http://drive.bmwgroup.net/form/ip"                                         
+ 
+Backup-SPSite $site1 -Path "E:\Backups\somesite2_2017.09.14.bak" -UseSQLSnapshot
+Backup-SPSite $site2 -Path "E:\Backups\IP_2017.09.14.bak" -UseSQLSnapshot
+ 
+Stop-SPAssignment -Global
+
+
+Note: SQL Snapshot is not supported in standard edition. 
+
+If not supported, use this:
+
+#KR: Backup site collection
+
+If ((Get-PSSnapIn -Name Microsoft.SharePoint.PowerShell -ErrorAction SilentlyContinue) -eq $null ) 
+{ Add-PSSnapIn -Name Microsoft.SharePoint.PowerShell }
+
+cls
+
+$site = "http://somesite:81/dle"                                      
+Backup-SPSite $site -Path "D:\Backups\DLE\dle_01-25-2019.bak"
