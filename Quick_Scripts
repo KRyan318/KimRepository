@@ -1,0 +1,34 @@
+SharePoint PowerShell On-Premise
+Quick Scripts
+
+Site Collections with Content Databases
+Get a list of all sites with the content database for each site: .
+
+Get-SPSite -Limit ALL | Select Hostname, WebApplication, Url, ContentDatabase, RootWeb | Sort-Object Hostname, WebApplication, URL | Out-GridView
+
+
+Get SharePoint Product
+
+get-spproduct | fl
+
+
+Get your Farm's Build Version
+
+(get-spfarm).buildversion
+
+SharePoint Servers
+
+Get-SPServer | Select-Object DisplayName, Role
+
+Site Collection Information
+
+Get-SPWebApplication -IncludeCentralAdministration | Get-SPSite -Limit All | Get-SPWeb -Limit All | Select-Object URL, Title, Description, ParentWeb, AssociatedOwnerGroup, SiteAdministrators, WebTemplate, UIVersion, QuickLaunchEnabled, TreeViewEnabled, Language, Locale, Author, HasUniquePerm | Sort URL | export-csv <file location and name.csv>
+
+Inventory Only One Library
+
+$URL = "http://somesite"
+Get-SPWeb $URL | Select -ExpandProperty Lists | Where { $_.GetType().Name -eq "LibraryName" -and -not $_.Hidden } | Select url, title | Out-GridView
+
+Webs: Get List of All Subsites in a Site Collection
+
+Get-SPWeb -Identity "http://somesite/*" -Limit ALL
